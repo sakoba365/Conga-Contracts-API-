@@ -1,0 +1,6 @@
+C:\Users\USER\source\repos\Conga Projects API Integration\bin\Debug\Conga Projects API Integration.exe.config
+C:\Users\USER\source\repos\Conga Projects API Integration\bin\Debug\Conga Projects API Integration.exe
+C:\Users\USER\source\repos\Conga Projects API Integration\bin\Debug\Conga Projects API Integration.pdb
+C:\Users\USER\source\repos\Conga Projects API Integration\obj\Debug\Conga Projects API Integration.csprojAssemblyReference.cache
+C:\Users\USER\source\repos\Conga Projects API Integration\obj\Debug\Conga Projects API Integration.exe
+C:\Users\USER\source\repos\Conga Projects API Integration\obj\Debug\Conga Projects API Integration.pdb
