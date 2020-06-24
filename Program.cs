@@ -16,6 +16,37 @@ namespace Conga_Projects_API_Integration
         {
             try
             {
+                String username = "it@oacsvcs.com";
+                String password = "Lk882008";
+                Conga cong = new Conga("https://app1.congacontracts.com/Contracts/wsapi/v1/");
+                String session_id = cong.login("Session", username, password);
+                Console.WriteLine("session_id: " + session_id);
+                Console.WriteLine("---------------------------------------------------------------------");
+                //String create_result = cong.createProject_group("Project", session_id, "Group Project.csv");
+                String create_result = cong.updateProject_group("Project", session_id, "Group Project Update.csv");
+                Console.ReadKey();
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("Error writing to the server: " + err);
+            }
+        }
+        static void Main_old(string[] args)
+        {
+            try
+            {
+                var records = Utils.readCSV("Group Project.csv");
+                Console.WriteLine(records);
+                foreach(Fields rc in records)
+                {
+                    Console.WriteLine(rc.projectName+"=>"+rc.projectDesc);
+                }
+               /* Console.ReadKey();
+                if (1 < 2)
+                {
+                    return;
+                }*/
                 String username = "";
                 String password = "";
                 ServicePointManager.Expect100Continue = true;
@@ -97,12 +128,12 @@ namespace Conga_Projects_API_Integration
             , List<String> functions, String homeAreaCode, String homeCountryCode, String homeExtension, String homeNumber, String lastName, String loginName
             , String mailStop, String middleName, String notes, String organization, String password, String postalCode, String prefix, List<String> roles
             , String state, String title, String workAreaCode, String workCountryCode, String workExtension, String workNumber, String type)*/
-            String create_result = cong.createProject("Project", session_id, "Project Description", new List<KeyValuePair<String, String>>(), "2020-09-30", "Sako Group"
-                                                     , "058fc186-be30-4828-83db-c909e24954bDFD", "Sako", "2020-06-30", "Started", true, true, true, "Address line 1", "Address Line2"
+            String create_result = cong.createProject_old("Project", session_id, "Project Description", new List<KeyValuePair<String, String>>(), "2020-09-30", "Sako Group"
+                                                     , "058fc186-be30-4828-83db-c909e24954bDFD", "Sako", "2020-06-30", "Active", true, true, true, "Address line 1", "Address Line2"
                                                      , "001", "1", "69", "01524525", "NY", "USA", true, "sako@email.com", "1", "01", "01", "052525", "Sako", true
                                                      , new List<String>(), "001", "1", "6", "2541525", "Adams", "testUser", "mailStop", "middleName", "notes"
                                                      , "organization", "Demo#2020", "WS205", "prefix", new List<String>(), "state", "Test Project 2"
-                                                     , "0001", "102", "85", "01", "Pending");
+                                                     , "0001", "102", "85", "01", "Default");
             Console.WriteLine("create_result: " + create_result);
 
             Console.ReadKey();
@@ -156,7 +187,206 @@ namespace Conga_Projects_API_Integration
             }
             return session_id;
         }
-        public String createProject(String path, String sessionid, String description, List<KeyValuePair<string, String>> dynamics, String endDate, String group
+        public String createProject_group(String path, String sessionid, String csv_path)
+        {
+            String result = "";
+            var records = Utils.readCSV(csv_path);
+            Console.WriteLine(records);
+            foreach (Fields rc in records)
+            {
+                Console.WriteLine("Creating Project - "+rc.projectName+"-");
+                try
+                {
+                    String url = this.endpoint + path;
+                    StringBuilder content_bulder = new StringBuilder();
+
+                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                    content_bulder.Append("<soapenv:Header/>");
+                    content_bulder.Append("<soapenv:Body>");
+                    content_bulder.Append("<proj:create>");
+                    content_bulder.Append("<project>");
+                    content_bulder.Append("<description>"+ rc.projectDesc+ "</description>");
+                    content_bulder.Append("<dynamics>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_c180775b4956496a95de45f9f1330141</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectNumber + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_4a46ed6e3986430ab63c15bff76fd145</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.federalProject + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_36623ba9ab7b47838d64fb95ee8a3d5f</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectManagerId+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_3e9b0a21862240c98b8f8f932871c38e</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectCoordinatorId+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_5308cec9a58b45c9bedbe36db9787af1</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectZip+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_6ba320b9ed7e4d75b1c9217b5a5034dd</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectAddress1+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_8822846af50a41fe9dea25d01de0420d</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectAccountantId+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_d4d350e3020547629e06eda06967564a</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectCity+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_1a773db5dfa24430b84537ad47c598dc</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\"></value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_c23ad17d4fb84b9d846bf5775490824e</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectAddress2+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_5b9dbad4fe314dd7822295d7ccee4489</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">"+rc.projectState+"</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("</dynamics>");
+                    content_bulder.Append("<group>"+rc.projectGroup+"</group>");
+                    content_bulder.Append("<name>"+rc.projectName+"</name>");
+                    content_bulder.Append("<status>"+rc.projectStatus+"</status>");
+                    content_bulder.Append("<type>"+rc.projectType+"</type>");
+                    content_bulder.Append("<startDate>" + rc.projectStartDate + "</startDate>");
+                    content_bulder.Append("<endDate>" + rc.projectEndDate + "</endDate>");
+                    content_bulder.Append("</project>");
+                    content_bulder.Append("</proj:create>");
+                    content_bulder.Append("</soapenv:Body>");
+                    content_bulder.Append("</soapenv:Envelope>");
+
+                    List<KeyValuePair<String, String>> headers = new List<KeyValuePair<String, String>>() {
+                        new KeyValuePair<String, String>("Cookie", "NOVATUSSID=" + sessionid),
+                        new KeyValuePair<String, String>("NOVATUSSID", sessionid)
+                    };
+                    result = Utils.postRequest(url, content_bulder.ToString(), headers);
+                    Console.WriteLine("Project Successfully created: " + result);
+                }
+                catch (WebException err)
+                {
+                    //Console.WriteLine("Create Project Error: " + err);
+                    //Console.WriteLine("Result: " + err.Response.ContentType);
+                    using (var streamReader = new StreamReader(err.Response.GetResponseStream()))
+                    {
+                        String result_text = streamReader.ReadToEnd();
+                        Console.WriteLine("Error Create Project: " + result_text);
+                        //Console.WriteLine("Message: " + err.Message);
+                    }
+                    result = err.Message;
+                }
+                Console.WriteLine("-----------------------------------------------------------------------------------------------------------");
+            }
+            return result;
+        }
+        public String updateProject_group(String path, String sessionid, String csv_path)
+        {
+            String result = "";
+            var records = Utils.readCSV(csv_path);
+            Console.WriteLine(records);
+            foreach (Fields rc in records)
+            {
+                Console.WriteLine("Updating Project - " + rc.projectName + "-");
+                try
+                {
+                    String url = this.endpoint + path;
+                    StringBuilder content_bulder = new StringBuilder();
+
+                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                    content_bulder.Append("<soapenv:Header/>");
+                    content_bulder.Append("<soapenv:Body>");
+                    content_bulder.Append("<proj:update>");
+                    content_bulder.Append("<project>");
+                    content_bulder.Append("<id>" + rc.projectID + "</id>");
+                    content_bulder.Append("<description>" + rc.projectDesc + "</description>");
+                    content_bulder.Append("<dynamics>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_c180775b4956496a95de45f9f1330141</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectNumber + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_4a46ed6e3986430ab63c15bff76fd145</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.federalProject + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_36623ba9ab7b47838d64fb95ee8a3d5f</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectManagerId + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_3e9b0a21862240c98b8f8f932871c38e</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectCoordinatorId + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_5308cec9a58b45c9bedbe36db9787af1</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectZip + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_6ba320b9ed7e4d75b1c9217b5a5034dd</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectAddress1 + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_8822846af50a41fe9dea25d01de0420d</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectAccountantId + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_d4d350e3020547629e06eda06967564a</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectCity + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_1a773db5dfa24430b84537ad47c598dc</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\"></value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_c23ad17d4fb84b9d846bf5775490824e</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectAddress2 + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("<entry>");
+                    content_bulder.Append("<key>do_5b9dbad4fe314dd7822295d7ccee4489</key>");
+                    content_bulder.Append("<value xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:type=\"xs:string\">" + rc.projectState + "</value>");
+                    content_bulder.Append("</entry>");
+                    content_bulder.Append("</dynamics>");
+                    content_bulder.Append("<group>" + rc.projectGroup + "</group>");
+                    content_bulder.Append("<name>" + rc.projectName + "</name>");
+                    content_bulder.Append("<status>" + rc.projectStatus + "</status>");
+                    content_bulder.Append("<type>" + rc.projectType + "</type>");
+                    content_bulder.Append("<startDate>" + rc.projectStartDate + "</startDate>");
+                    content_bulder.Append("<endDate>" + rc.projectEndDate + "</endDate>");
+                    content_bulder.Append("</project>");
+                    content_bulder.Append("</proj:update>");
+                    content_bulder.Append("</soapenv:Body>");
+                    content_bulder.Append("</soapenv:Envelope>");
+
+                    List<KeyValuePair<String, String>> headers = new List<KeyValuePair<String, String>>() {
+                        new KeyValuePair<String, String>("Cookie", "NOVATUSSID=" + sessionid),
+                        new KeyValuePair<String, String>("NOVATUSSID", sessionid)
+                    };
+                    result = Utils.postRequest(url, content_bulder.ToString(), headers);
+                    Console.WriteLine("Project Successfully updated: " + result);
+                }
+                catch (WebException err)
+                {
+                    //Console.WriteLine("Create Project Error: " + err);
+                    //Console.WriteLine("Result: " + err.Response.ContentType);
+                    using (var streamReader = new StreamReader(err.Response.GetResponseStream()))
+                    {
+                        String result_text = streamReader.ReadToEnd();
+                        Console.WriteLine("Error Updating Project: " + result_text);
+                        //Console.WriteLine("Message: " + err.Message);
+                    }
+                    result = err.Message;
+                }
+                Console.WriteLine("-----------------------------------------------------------------------------------------------------------");
+            }
+            return result;
+        }
+        public String createProject_old(String path, String sessionid, String description, List<KeyValuePair<string, String>> dynamics, String endDate, String group
                                     , String id, String name, String startDate, String status, bool documentUpload, bool document, bool modify, String addressLine1
             , String addressLine2, String cellAreaCode, String cellCountryCode, String cellExtension, String cellNumber, String city, String country, bool disabled
             , String emailAddress, String faxAreaCode, String faxCountryCode, String faxExtension, String faxNumber, String firstName, bool forcePasswordChange
@@ -188,9 +418,9 @@ namespace Conga_Projects_API_Integration
                 content_bulder.Append("<!--Optional:-->");
                 content_bulder.Append("<endDate>" + endDate + "</endDate>");
                 content_bulder.Append("<!--Optional:-->");
-                content_bulder.Append("<group>" + group + "</group>");
+                //content_bulder.Append("<group>" + group + "</group>");
                 content_bulder.Append("<!--Optional:-->");
-                content_bulder.Append("<id>" + id + "</id>");
+                //content_bulder.Append("<id>" + id + "</id>");
                 content_bulder.Append("<!--Optional:-->");
                 content_bulder.Append("<name>" + name + "</name>");
                 content_bulder.Append("<!--Optional:-->");
@@ -248,7 +478,7 @@ namespace Conga_Projects_API_Integration
                 content_bulder.Append("<!--Optional:-->");
                 content_bulder.Append("<homeNumber>" + homeNumber + "</homeNumber>");
                 content_bulder.Append("<!--Optional:-->");
-                //content_bulder.Append("<id>?</id>");
+                content_bulder.Append("<id></id>");
                 content_bulder.Append("<!--Optional:-->");
                 content_bulder.Append("<lastName>" + lastName + "</lastName>");
                 content_bulder.Append("<!--Optional:-->");
@@ -264,7 +494,7 @@ namespace Conga_Projects_API_Integration
                 content_bulder.Append("<!--Optional:-->");
                 content_bulder.Append("<password>" + password + "</password>");
                 content_bulder.Append("<!--Optional:-->");
-                //content_bulder.Append("<personId>?</personId>");
+                content_bulder.Append("<personId>c89fe3f0-a65e-4e77-9880-e88dec69fa09</personId>");
                 content_bulder.Append("<!--Optional:-->");
                 content_bulder.Append("<postalCode>" + postalCode + "</postalCode>");
                 content_bulder.Append("<!--Optional:-->");
