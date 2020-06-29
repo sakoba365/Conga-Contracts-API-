@@ -85,6 +85,50 @@ namespace Conga_Projects_API_Integration
             }
             
         }
+        public static IEnumerable<Fields2> readCSV2(String csv_file)
+        {
+
+            using (var reader = new StreamReader(csv_file))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                /*var records = csv.GetRecords<Fields>();
+                return records;
+                */
+                var records = new List<Fields2>();
+                csv.Read();
+                csv.ReadHeader();
+                while (csv.Read())
+                {
+                    var record = new Fields2
+                    {
+                        projectName = csv.GetField<String>("projectName"),
+                        projectDesc = csv.GetField<String>("projectDesc"),
+                        projectStatus = csv.GetField<String>("projectStatus"),
+                        projectType = csv.GetField<String>("projectType"),
+                        projectStartDate = csv.GetField<String>("projectStartDate"),
+                        projectEndDate = csv.GetField<String>("projectEndDate"),
+                        projectNumber = csv.GetField<String>("projectNumber"),
+                        projectCoordinatorId = csv.GetField<String>("projectCoordinatorId"),
+                        projectAccountantId = csv.GetField<String>("projectAccountantId"),
+                        federalProject = csv.GetField<String>("federalProject"),
+                        projectAddress1 = csv.GetField<String>("projectAddress1"),
+                        projectAddress2 = csv.GetField<String>("projectAddress2"),
+                        projectCity = csv.GetField<String>("projectCity"),
+                        projectState = csv.GetField<String>("projectState"),
+                        projectZip = csv.GetField<String>("projectZip"),
+                        projectManagerId = csv.GetField<String>("projectManagerId"),
+                        projectID = csv.GetField<String>("projectID"),
+                        teamID = csv.GetField<String>("team_id"),
+                        docUpload = csv.GetField<String>("documentUpload"),
+                        documents = csv.GetField<String>("documents"),
+                        modify = csv.GetField<String>("modify")
+                    };
+                    records.Add(record);
+                }
+                return records;
+            }
+
+        }
     }
     public class Fields
     {
@@ -106,6 +150,34 @@ namespace Conga_Projects_API_Integration
         public String projectState { get; set; }
         public String projectZip { get; set; }
         public String projectID { get; set; }
+
+
+    }
+    public class Fields2
+    {
+        public String projectName { get; set; }
+        public String projectDesc { get; set; }
+        public String projectGroup { get; set; }
+        public String projectStatus { get; set; }
+        public String projectType { get; set; }
+        public String projectStartDate { get; set; }
+        public String projectEndDate { get; set; }
+        public String projectNumber { get; set; }
+        public String projectCoordinatorId { get; set; }
+        public String projectAccountantId { get; set; }
+        public String federalProject { get; set; }
+        public String projectAddress1 { get; set; }
+        public String projectAddress2 { get; set; }
+        public String projectCity { get; set; }
+        public String projectState { get; set; }
+        public String projectZip { get; set; }
+        public String projectManagerId { get; set; }
+        public String projectID { get; set; }
+        public String teamID { get; set; }
+        public String docUpload { get; set; }
+        public String documents { get; set; }
+        public String modify { get; set; }
+
 
     }
 }
