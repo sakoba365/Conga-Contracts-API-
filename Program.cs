@@ -45,8 +45,8 @@ namespace Conga_Projects_API_Integration
 
                 Console.WriteLine("*********************************");
 
-                String username = "it@oacsvcs.com";
-                String password = "Lk882008";
+                String username = "my_username@at.com";
+                String password = "my_password";
                 Conga cong = new Conga("https://app1.congacontracts.com/Contracts/wsapi/v1/");
                 String session_id = cong.login("Session", username, password);
                 Console.WriteLine("session_id: " + session_id);
@@ -112,23 +112,23 @@ namespace Conga_Projects_API_Integration
                 header_c.Add("Content-Type", "text/xml");
                 //httpWebRequest.Headers.Add("Content-Type", "text/xml");// headers = header_c;
 
-                /*var content = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://novatuscontracts.com/api/v1/session\">" +
+                /*var content = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://sakoscontracts.com/api/v1/session\">" +
                                 "< soapenv:Header />" +
                                 "< soapenv:Body >" +
                                     "< ses:login >" +
-                                         "< username > it@oacsvcs.com </ username >" +
-                                         "< password > Lk882008 </ password >" +
+                                         "< username > my_username@at.com </ username >" +
+                                         "< password > my_password </ password >" +
                                     "</ ses:login >" +
                                 "</ soapenv:Body >" +
               "</ soapenv:Envelope > ";*/
-                var content = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://novatuscontracts.com/api/v1/session\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <ses:login>\r\n         <!--Optional:-->\r\n         <username>it@oacsvcs.com</username>\r\n         <!--Optional:-->\r\n         <password>Lk882008</password>\r\n      </ses:login>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>";
+                var content = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://sakoscontracts.com/api/v1/session\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <ses:login>\r\n         <!--Optional:-->\r\n         <username>my_username@at.com</username>\r\n         <!--Optional:-->\r\n         <password>my_password</password>\r\n      </ses:login>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>";
                 StringBuilder content_bulder = new StringBuilder();
-                content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://novatuscontracts.com/api/v1/session\">");
+                content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://sakoscontracts.com/api/v1/session\">");
                 content_bulder.Append("<soapenv:Header/>");
                 content_bulder.Append("<soapenv:Body>");
                 content_bulder.Append("<ses:login>");
-                content_bulder.Append("<username>it@oacsvcs.com</username>");
-                content_bulder.Append("<password>Lk882008</password>");
+                content_bulder.Append("<username>my_username@at.com</username>");
+                content_bulder.Append("<password>my_password</password>");
                 content_bulder.Append("</ses:login>");
                 content_bulder.Append("</soapenv:Body>");
                 content_bulder.Append("</soapenv:Envelope>");
@@ -148,7 +148,7 @@ namespace Conga_Projects_API_Integration
                     //Console.WriteLine("Elem " + envelope.Descendants("loginResponse"));
 
                     XDocument doc = XDocument.Parse(result);
-                    XNamespace xmlns = "http://novatuscontracts.com/api/v1/session";
+                    XNamespace xmlns = "http://sakoscontracts.com/api/v1/session";
 
                     var orderNode = doc.Descendants(xmlns + "loginResponse").Elements("sessionId");
 
@@ -170,7 +170,7 @@ namespace Conga_Projects_API_Integration
             }
 
             Conga cong = new Conga("https://app1.congacontracts.com/Contracts/wsapi/v1/");
-            String session_id = cong.login("Session", "it@oacsvcs.com", "Lk882008");
+            String session_id = cong.login("Session", "my_username@at.com", "my_password");
             Console.WriteLine("session_id: " + session_id);
             /*(String path, String sessionid, String description, List<KeyValuePair<string, String>> dynamics, String endDate, String group
                                     , String id, String name, String startDate, String status, bool documentUpload, bool document, bool modify, String addressLine1
@@ -205,7 +205,7 @@ namespace Conga_Projects_API_Integration
             {
                 String url = this.endpoint + path;
                 StringBuilder content_bulder = new StringBuilder();
-                content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://novatuscontracts.com/api/v1/session\">");
+                content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ses=\"http://sakoscontracts.com/api/v1/session\">");
                 content_bulder.Append("<soapenv:Header/>");
                 content_bulder.Append("<soapenv:Body>");
                 content_bulder.Append("<ses:login>");
@@ -217,7 +217,7 @@ namespace Conga_Projects_API_Integration
 
                 String result = Utils.postRequest(url, content_bulder.ToString());
                 XDocument doc = XDocument.Parse(result);
-                XNamespace xmlns = "http://novatuscontracts.com/api/v1/session";
+                XNamespace xmlns = "http://sakoscontracts.com/api/v1/session";
 
                 var loginResponseNode = doc.Descendants(xmlns + "loginResponse").Elements("sessionId");
 
@@ -251,7 +251,7 @@ namespace Conga_Projects_API_Integration
                     String url = this.endpoint + path;
                     StringBuilder content_bulder = new StringBuilder();
 
-                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://sakoscontracts.com/api/v1/project\">");
                     content_bulder.Append("<soapenv:Header/>");
                     content_bulder.Append("<soapenv:Body>");
                     content_bulder.Append("<proj:create>");
@@ -350,7 +350,7 @@ namespace Conga_Projects_API_Integration
                     String url = this.endpoint + path;
                     StringBuilder content_bulder = new StringBuilder();
 
-                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://sakoscontracts.com/api/v1/project\">");
                     content_bulder.Append("<soapenv:Header/>");
                     content_bulder.Append("<soapenv:Body>");
                     content_bulder.Append("<proj:update>");
@@ -450,7 +450,7 @@ namespace Conga_Projects_API_Integration
                     String url = this.endpoint + path;
                     StringBuilder content_bulder = new StringBuilder();
 
-                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://sakoscontracts.com/api/v1/project\">");
                     content_bulder.Append("<soapenv:Header/>");
                     content_bulder.Append("<soapenv:Body>");
                     content_bulder.Append("<proj:create>");
@@ -559,7 +559,7 @@ namespace Conga_Projects_API_Integration
                     String url = this.endpoint + path;
                     StringBuilder content_bulder = new StringBuilder();
 
-                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                    content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://sakoscontracts.com/api/v1/project\">");
                     content_bulder.Append("<soapenv:Header/>");
                     content_bulder.Append("<soapenv:Body>");
                     content_bulder.Append("<proj:update>");
@@ -668,7 +668,7 @@ namespace Conga_Projects_API_Integration
             {
                 String url = this.endpoint + path;
                 StringBuilder content_bulder = new StringBuilder();
-                content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://novatuscontracts.com/api/v1/project\">");
+                content_bulder.Append("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:proj=\"http://sakoscontracts.com/api/v1/project\">");
                 content_bulder.Append("<soapenv:Header/>");
                 content_bulder.Append("<soapenv:Body>");
                 content_bulder.Append("<proj:create>");

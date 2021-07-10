@@ -1,2 +1,0 @@
-projectID,projectName,projectDesc,projectGroup,projectStatus,projectType,projectStartDate,projectEndDate,projectNumber,projectManagerId,projectCoordinatorId,projectAccountantId,federalProject,projectAddress1,projectAddress2,projectCity,projectState,projectZip
-60428761-3837-452d-b828-8867b3586ce7,Test CSV Project 1 Updated,Test CSV Description 1 Updated,Test,Active,Default,2020-06-30T00:00:00Z,2020-09-30T00:00:00Z,X0001,ef7594f2-6c15-4cdd-bdcd-fb95c00af101,ef7594f2-6c15-4cdd-bdcd-fb95c00af101,ef7594f2-6c15-4cdd-bdcd-fb95c00af101,Yes,Address1,Address2,New York,NY,12020
